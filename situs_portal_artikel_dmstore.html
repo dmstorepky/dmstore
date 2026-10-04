@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dmstore - Portal Artikel & Berita Terkini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo Brand -->
+                <div class="flex items-center gap-3">
+                    <a href="#" onclick="filterCategory('Semua'); return false;" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+                            dm
+                        </div>
+                        <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                            dmstore
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Live Search Bar Desktop -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Cari artikel, topik, atau penulis..." 
+                        class="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-transparent dark:border-gray-700 rounded-full focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-400"></i>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center gap-3">
+                    <!-- Bookmark View Toggle -->
+                    <button onclick="toggleBookmarkView()" id="bookmarkToggleBtn" title="Artikel Tersimpan" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
+                        <i class="fa-regular fa-bookmark text-lg"></i>
+                        <span id="bookmarkBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center text-[10px]">0</span>
+                    </button>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="themeToggleBtn" onclick="toggleDarkMode()" title="Ubah Tema" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                        <i class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Navigation Links (Desktop) -->
+            <nav class="hidden md:flex space-x-1 py-2 overflow-x-auto border-t border-gray-100 dark:border-gray-800/50 text-sm font-medium" id="categoryNav">
+                <!-- Injected dynamically -->
+            </nav>
+
+            <!-- Search Mobile -->
+            <div class="md:hidden py-2 pb-3">
+                <div class="relative">
+                    <input type="text" id="searchInputMobile" oninput="handleSearchMobile()" placeholder="Cari artikel..." 
+                        class="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-transparent dark:border-gray-700 rounded-full focus:outline-none focus:border-blue-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 pt-2 pb-4 space-y-1">
+            <!-- Mobile category nav injected here -->
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- HERO SECTION (FEATURED ARTICLE) -->
+        <section id="heroSection" class="mb-12">
+            <!-- Injected via JavaScript -->
+        </section>
+
+        <!-- FILTER & SORT BAR -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+            <div class="flex items-center gap-2">
+                <h2 id="sectionTitle" class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Artikel Terbaru
+                </h2>
+                <span id="articleCountBadge" class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                    0
+                </span>
+            </div>
+
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <label for="sortBy" class="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">Urutkan:</label>
+                <select id="sortBy" onchange="handleSortChange(this.value)" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-auto p-2">
+                    <option value="latest">Terbaru</option>
+                    <option value="popular">Paling Populer</option>
+                    <option value="likes">Suka Terbanyak</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- GRID LAYOUT WITH SIDEBAR -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- ARTICLE GRID (8 Columns on desktop) -->
+            <div class="lg:col-span-8">
+                <div id="articleGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Cards will be populated here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-16 px-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+                    <i class="fa-regular fa-folder-open text-5xl text-gray-400 mb-3"></i>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Tidak ada artikel ditemukan</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Coba sesuaikan kata kunci atau filter pencarian Anda.</p>
+                    <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">Riset Filter</button>
+                </div>
+            </div>
+
+            <!-- SIDEBAR (4 Columns on desktop) -->
+            <aside class="lg:col-span-4 space-y-8">
+                
+                <!-- Trending / Popular Section -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                        <i class="fa-solid fa-fire text-orange-500 text-lg"></i>
+                        <h3 class="font-bold text-gray-900 dark:text-white">Trending Minggu Ini</h3>
+                    </div>
+                    <div id="trendingList" class="space-y-4">
+                        <!-- Trending items dynamically injected -->
+                    </div>
+                </div>
+
+                <!-- Hot Topics / Tag Cloud -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                        <i class="fa-solid fa-hashtag text-blue-500 text-lg"></i>
+                        <h3 class="font-bold text-gray-900 dark:text-white">Topik Hangat</h3>
+                    </div>
+                    <div id="tagCloud" class="flex flex-wrap gap-2">
+                        <!-- Tags injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Newsletter Subscription Widget -->
+                <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                    <i class="fa-regular fa-paper-plane text-3xl mb-3 text-blue-200"></i>
+                    <h3 class="text-xl font-bold">Langganan Newsletter</h3>
+                    <p class="text-xs text-blue-100 mt-1 mb-4">Dapatkan artikel pilihan dan rangkuman berita terpopuler langsung di inbox Anda setiap minggu.</p>
+                    
+                    <form onsubmit="handleNewsletterSubmit(event)" class="space-y-2">
+                        <input type="email" required id="newsletterEmail" placeholder="Masukkan alamat email Anda" 
+                            class="w-full px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-0 rounded-xl focus:ring-2 focus:ring-blue-300 focus:outline-none placeholder-gray-400">
+                        <button type="submit" class="w-full py-2.5 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition-all shadow-md active:scale-95">
+                            Berlangganan Sekarang
+                        </button>
+                    </form>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- ARTICLE DETAIL MODAL / READING VIEW -->
+    <div id="articleModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+        <div class="relative bg-white dark:bg-gray-900 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-800">
+            
+            <!-- Sticky Modal Header Bar -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur sticky top-0 z-10">
+                <span id="modalCategory" class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+                    Kategori
+                </span>
+                <div class="flex items-center gap-3">
+                    <button id="modalBookmarkBtn" onclick="" class="p-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 transition">
+                        <i class="fa-regular fa-bookmark text-lg"></i>
+                    </button>
+                    <button onclick="closeModal()" class="p-2 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content Area -->
+            <div class="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1">
+                <h1 id="modalTitle" class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                    Judul Artikel
+                </h1>
+
+                <!-- Meta Author Info -->
+                <div class="flex items-center justify-between border-y border-gray-100 dark:border-gray-800 py-3">
+                    <div class="flex items-center gap-3">
+                        <img id="modalAuthorImg" src="" alt="Author" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                        <div>
+                            <p id="modalAuthorName" class="text-sm font-semibold text-gray-900 dark:text-white"></p>
+                            <p id="modalDate" class="text-xs text-gray-500 dark:text-gray-400"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                        <span><i class="fa-regular fa-clock mr-1"></i> <span id="modalReadTime"></span></span>
+                        <span><i class="fa-regular fa-eye mr-1"></i> <span id="modalViews"></span></span>
+                    </div>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="rounded-xl overflow-hidden shadow-sm">
+                    <img id="modalImage" src="" alt="Artikel" class="w-full h-64 sm:h-96 object-cover">
+                </div>
+
+                <!-- Content Body -->
+                <div id="modalBody" class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg space-y-4">
+                    <!-- Injected body -->
+                </div>
+
+                <!-- Interactive Actions: Like & Share -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-800">
+                    <button id="modalLikeBtn" onclick="" class="flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30 transition font-medium">
+                        <i class="fa-regular fa-heart text-lg"></i>
+                        <span id="modalLikeCount">0</span> Suka
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 mr-1">Bagikan:</span>
+                        <button onclick="shareArticle('facebook')" class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center hover:opacity-90 transition"><i class="fa-brands fa-facebook-f text-sm"></i></button>
+                        <button onclick="shareArticle('twitter')" class="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:opacity-90 transition"><i class="fa-brands fa-x-twitter text-sm"></i></button>
+                        <button onclick="shareArticle('whatsapp')" class="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center hover:opacity-90 transition"><i class="fa-brands fa-whatsapp text-sm"></i></button>
+                        <button onclick="copyArticleLink()" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center justify-center hover:bg-gray-300 transition" title="Salin Tautan"><i class="fa-regular fa-copy text-sm"></i></button>
+                    </div>
+                </div>
+
+                <!-- COMMENTS SECTION -->
+                <div class="pt-8 border-t border-gray-200 dark:border-gray-800 space-y-6">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-regular fa-comments text-blue-500"></i>
+                        Komentar (<span id="commentCount">0</span>)
+                    </h3>
+
+                    <!-- Add Comment Form -->
+                    <form id="commentForm" onsubmit="handleAddComment(event)" class="space-y-3 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="text" id="commenterName" required placeholder="Nama Anda" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <textarea id="commentText" required rows="3" placeholder="Tulis tanggapan atau komentar Anda..." class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg transition shadow-sm">Kirim Komentar</button>
+                    </form>
+
+                    <!-- Comments List -->
+                    <div id="commentsList" class="space-y-4">
+                        <!-- Dynamic comments inserted here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-xl shadow-xl border border-gray-700 transition-all transform translate-y-full">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toastMessage" class="text-sm font-medium">Notifikasi</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 transition-colors mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-lg">dm</div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">dmstore</span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                        Platform publikasi artikel campuran independen terdepan yang menyajikan konten edukatif, informasi bisnis, tren teknologi, gaya hidup, dan hiburan terkini.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Kategori</h4>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li><a href="#" onclick="filterCategory('Teknologi'); return false;" class="hover:text-blue-600 transition">Teknologi</a></li>
+                        <li><a href="#" onclick="filterCategory('Gaya Hidup'); return false;" class="hover:text-blue-600 transition">Gaya Hidup</a></li>
+                        <li><a href="#" onclick="filterCategory('Hiburan'); return false;" class="hover:text-blue-600 transition">Hiburan</a></li>
+                        <li><a href="#" onclick="filterCategory('Bisnis'); return false;" class="hover:text-blue-600 transition">Bisnis</a></li>
+                        <li><a href="#" onclick="filterCategory('Edukasi'); return false;" class="hover:text-blue-600 transition">Edukasi</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Tautan Cepat</h4>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li><a href="#" onclick="filterCategory('Semua'); return false;" class="hover:text-blue-600 transition">Beranda</a></li>
+                        <li><a href="#" onclick="toggleBookmarkView(); return false;" class="hover:text-blue-600 transition">Artikel Tersimpan</a></li>
+                        <li><a href="#" onclick="showToast('Fitur Tentang Kami segera hadir!'); return false;" class="hover:text-blue-600 transition">Tentang Kami</a></li>
+                        <li><a href="#" onclick="showToast('Fitur Kebijakan Privasi!'); return false;" class="hover:text-blue-600 transition">Kebijakan Privasi</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Ikuti Kami</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Dapatkan pembaruan berita harian langsung di media sosial Anda.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-blue-600 hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-sky-500 hover:text-white transition"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-pink-600 hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-red-600 hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-gray-200 dark:border-gray-800 text-center text-xs text-gray-500 dark:text-gray-400">
+                <p>&copy; 2026 <span class="font-semibold text-gray-700 dark:text-gray-300">dmstore</span>. Seluruh Hak Cipta Dilindungi Undang-Undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // Data Artikel Dummy Komprehensif
+        const initialArticles = [
+            {
+                id: 1,
+                title: "Perkembangan AI Generatif di Tahun 2026: Dampak pada Industri Kreatif dan Pekerjaan",
+                category: "Teknologi",
+                author: "Budi Pratama",
+                authorImg: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+                date: "04 Okt 2026",
+                readTime: "5 menit",
+                views: 1420,
+                likes: 185,
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Kecerdasan buatan kini merambah bidang desain, musik, dan penulisan. Bagaimana para profesional beradaptasi dengan perubahan masif ini?",
+                content: `<p>Perkembangan teknologi Kecerdasan Buatan (AI) telah mencapai fase eksponensial di tahun 2026. Alat-alat inovatif tidak hanya mampu memproses teks, tetapi juga mampu menciptakan konten audio-visual yang hampir tak bisa dibedakan dengan karya manusia.</p>
+                <p>Bagi para profesional di industri kreatif, disrupsi ini membawa dilema sekaligus peluang emas. Mereka yang mampu mengadopsi AI sebagai asisten kreatif terbukti mengalami peningkatan produktivitas hingga tiga kali lipat.</p>
+                <p>Namun, aspek etika seperti hak cipta, kepemilikan intelektual, serta privasi data menjadi tantangan besar yang membutuhkan regulasi adaptif dari pemerintah maupun asosiasi profesi internasional.</p>`,
+                featured: true
+            },
+            {
+                id: 2,
+                title: "5 Strategi Manajerial Keuangan Pribadi untuk Menghadapi Inflasi Global",
+                category: "Bisnis",
+                author: "Siti Rahma",
+                authorImg: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80",
+                date: "02 Okt 2026",
+                readTime: "4 menit",
+                views: 980,
+                likes: 124,
+                image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Langkah konkrit membangun dana darurat, diversifikasi aset, serta memangkas pengeluaran non-esensial secara efektif.",
+                content: `<p>Kondisi ekonomi global saat ini menuntut setiap individu untuk lebih cermat dalam mengelola arus kas pribadi. Ketidakpastian pasar finansial menjadikan literasi keuangan sebagai keterampilan dasar yang wajib dimiliki.</p>
+                <p>Langkah pertama yang paling krusial adalah membentuk dana darurat minimal 6 kali pengeluaran bulanan. Setelah itu, alokasi pada instrumen investasi berrisiko rendah hingga sedang seperti obligasi negara dapat membantu menjaga nilai kekayaan dari erosi inflasi.</p>`,
+                featured: false
+            },
+            {
+                id: 3,
+                title: "Gaya Hidup Minimalis: Solusi Menjaga Kesehatan Mental di Era Digital",
+                category: "Gaya Hidup",
+                author: "Andi Wijaya",
+                authorImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80",
+                date: "01 Okt 2026",
+                readTime: "6 menit",
+                views: 2100,
+                likes: 310,
+                image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Kurangi tumpukan barang dan distraksi media sosial untuk memperoleh kedamaian pikiran dan fokus yang lebih baik.",
+                content: `<p>Gaya hidup minimalis bukan sekadar tren merapikan rumah, melainkan sebuah filosofi hidup untuk menyederhanakan prioritas. Dengan membatasi konsumsi informasi berlebih (digital detox) dan fokus pada hal-hal yang benar-benar bernilai, tingkat stres dapat ditekan secara signifikan.</p>`,
+                featured: false
+            },
+            {
+                id: 4,
+                title: "Review Video Game AAA Terbaru: Grafik Spesifik & Gameplay Memukau",
+                category: "Hiburan",
+                author: "Rian Hidayat",
+                authorImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80",
+                date: "29 Sep 2026",
+                readTime: "7 menit",
+                views: 3400,
+                likes: 450,
+                image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Eksplorasi mendalam mengenai mekanik permainan, kualitas grafis ray-tracing, serta alur cerita yang imersif.",
+                content: `<p>Game bergenre RPG open-world yang baru diluncurkan ini berhasil menetapkan standar baru dalam pengalaman bermain. visual ultra-realistis didukung oleh teknologi rendering audio spasial yang membawa pemain seolah masuk ke dalam dunia fantasi.</p>`,
+                featured: false
+            },
+            {
+                id: 5,
+                title: "Pentingnya Pembelajaran Berbasis Proyek (PBL) dalam Kurikulum Modern",
+                category: "Edukasi",
+                author: "Maya Indah",
+                authorImg: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80",
+                date: "28 Sep 2026",
+                readTime: "5 menit",
+                views: 750,
+                likes: 98,
+                image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Metode mengajar interaktif yang melatih pemikiran kritis, kolaborasi tim, dan pemecahan masalah dunia nyata.",
+                content: `<p>Sistem pendidikan kini bergeser dari sekadar hafalan menjadi penerapan praktis melalui Project-Based Learning (PBL). Para siswa diajak menyelesaikan studi kasus nyata yang membutuhkan integrasi antar disiplin ilmu.</p>`,
+                featured: false
+            },
+            {
+                id: 6,
+                title: "Tips Memulai Bisnis Micro-SaaS Bagi Programmer Pemula",
+                category: "Bisnis",
+                author: "Budi Pratama",
+                authorImg: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+                date: "25 Sep 2026",
+                readTime: "8 menit",
+                views: 1890,
+                likes: 230,
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Langkah demi langkah membangun perangkat lunak skala kecil berpendapatan berulang tanpa modal besar.",
+                content: `<p>Micro-SaaS menjadi pilihan populer bagi developer solo untuk membangun bisnis mandiri. Kuncinya adalah menyelesaikan satu masalah spesifik bagi segmen audiens yang segmented.</p>`,
+                featured: false
+            }
+        ];
+
+        // Categories Configuration
+        const categories = ["Semua", "Teknologi", "Gaya Hidup", "Hiburan", "Bisnis", "Edukasi"];
+        const tags = ["AI & Tech", "Investasi", "Kesehatan", "Gaming", "Inovasi", "Karir", "Tips & Trik", "Finansial"];
+
+        // State Management
+        let articles = JSON.parse(localStorage.getItem('dmstore_articles')) || initialArticles;
+        let bookmarks = JSON.parse(localStorage.getItem('dmstore_bookmarks')) || [];
+        let likesMap = JSON.parse(localStorage.getItem('dmstore_likes')) || {};
+        let commentsMap = JSON.parse(localStorage.getItem('dmstore_comments')) || {
+            1: [{ name: "Farhan", text: "Artikel yang sangat membuka wawasan!", date: "04 Okt 2026" }]
+        };
+
+        let currentCategory = "Semua";
+        let searchQuery = "";
+        let currentSort = "latest";
+        let isBookmarkOnlyView = false;
+        let activeModalArticleId = null;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderCategoryNav();
+            renderArticles();
+            renderSidebar();
+            updateBookmarkBadge();
+        });
+
+        // Theme Handling
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+                showToast('Mode Terang Aktif');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+                showToast('Mode Gelap Aktif');
+            }
+        }
+
+        // Render Categories Bar
+        function renderCategoryNav() {
+            const navContainer = document.getElementById('categoryNav');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            let desktopHtml = '';
+            let mobileHtml = '';
+
+            categories.forEach(cat => {
+                const isActive = currentCategory === cat && !isBookmarkOnlyView;
+                const activeClass = isActive 
+                    ? 'bg-blue-600 text-white rounded-lg' 
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg';
+
+                desktopHtml += `
+                    <button onclick="filterCategory('${cat}')" class="px-3.5 py-1.5 transition whitespace-nowrap ${activeClass}">
+                        ${cat}
+                    </button>
+                `;
+
+                mobileHtml += `
+                    <button onclick="filterCategory('${cat}'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-sm ${isActive ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'}">
+                        ${cat}
+                    </button>
+                `;
+            });
+
+            navContainer.innerHTML = desktopHtml;
+            mobileMenu.innerHTML = mobileHtml;
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Filter and Search Operations
+        function filterCategory(category) {
+            currentCategory = category;
+            isBookmarkOnlyView = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInputMobile').value = '';
+            searchQuery = '';
+            renderCategoryNav();
+            renderArticles();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderArticles();
+        }
+
+        function handleSearchMobile() {
+            searchQuery = document.getElementById('searchInputMobile').value.toLowerCase();
+            renderArticles();
+        }
+
+        function handleSortChange(sortVal) {
+            currentSort = sortVal;
+            renderArticles();
+        }
+
+        function toggleBookmarkView() {
+            isBookmarkOnlyView = !isBookmarkOnlyView;
+            if (isBookmarkOnlyView) {
+                currentCategory = 'Bookmark';
+                showToast('Menampilkan Artikel Tersimpan');
+            } else {
+                currentCategory = 'Semua';
+            }
+            renderCategoryNav();
+            renderArticles();
+        }
+
+        // Main Article Filter & Render Algorithm
+        function getFilteredArticles() {
+            return articles.filter(art => {
+                const matchesCategory = isBookmarkOnlyView 
+                    ? bookmarks.includes(art.id) 
+                    : (currentCategory === "Semua" || art.category === currentCategory);
+
+                const matchesSearch = art.title.toLowerCase().includes(searchQuery) || 
+                                      art.excerpt.toLowerCase().includes(searchQuery) ||
+                                      art.author.toLowerCase().includes(searchQuery);
+
+                return matchesCategory && matchesSearch;
+            }).sort((a, b) => {
+                if (currentSort === 'popular') return b.views - a.views;
+                if (currentSort === 'likes') return (likesMap[b.id] || b.likes) - (likesMap[a.id] || a.likes);
+                return b.id - a.id; // 'latest'
+            });
+        }
+
+        function renderArticles() {
+            const heroSection = document.getElementById('heroSection');
+            const gridContainer = document.getElementById('articleGrid');
+            const emptyState = document.getElementById('emptyState');
+            const titleEl = document.getElementById('sectionTitle');
+            const countBadge = document.getElementById('articleCountBadge');
+
+            const filtered = getFilteredArticles();
+
+            // Section Title Updates
+            if (isBookmarkOnlyView) {
+                titleEl.textContent = "Artikel Tersimpan";
+            } else if (searchQuery) {
+                titleEl.textContent = `Hasil Pencarian: "${searchQuery}"`;
+            } else {
+                titleEl.textContent = currentCategory === "Semua" ? "Artikel Terbaru" : `Kategori: ${currentCategory}`;
+            }
+
+            countBadge.textContent = `${filtered.length} Artikel`;
+
+            // Hero Banner Logic (Only on Home View)
+            const featuredArticle = articles.find(a => a.featured) || articles[0];
+            if (!isBookmarkOnlyView && currentCategory === "Semua" && !searchQuery && featuredArticle) {
+                heroSection.classList.remove('hidden');
+                heroSection.innerHTML = createHeroHTML(featuredArticle);
+            } else {
+                heroSection.classList.add('hidden');
+            }
+
+            // Grid Rendering
+            if (filtered.length === 0) {
+                gridContainer.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                gridContainer.innerHTML = filtered.map(art => createArticleCardHTML(art)).join('');
+            }
+        }
+
+        // HTML Templates
+        function createHeroHTML(art) {
+            const isBookmarked = bookmarks.includes(art.id);
+            return `
+                <div class="relative rounded-3xl overflow-hidden shadow-xl bg-gray-900 group">
+                    <img src="${art.image}" alt="${art.title}" class="w-full h-[380px] sm:h-[450px] object-cover opacity-60 group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6 sm:p-10">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-wider rounded-full">${art.category}</span>
+                            <span class="text-xs text-gray-300"><i class="fa-regular fa-clock mr-1"></i>${art.readTime}</span>
+                            <span class="text-xs text-gray-300 hidden sm:inline">&bull; ${art.date}</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight mb-3 hover:text-blue-300 transition cursor-pointer" onclick="openModal(${art.id})">
+                            ${art.title}
+                        </h1>
+                        <p class="text-gray-300 text-sm sm:text-base line-clamp-2 max-w-2xl mb-5">
+                            ${art.excerpt}
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <img src="${art.authorImg}" class="w-9 h-9 rounded-full object-cover border-2 border-white/50">
+                                <span class="text-sm font-medium text-white">${art.author}</span>
+                            </div>
+                            <button onclick="openModal(${art.id})" class="px-5 py-2.5 bg-white text-gray-900 font-semibold text-sm rounded-xl hover:bg-blue-50 transition shadow">
+                                Baca Selengkapnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createArticleCardHTML(art) {
+            const isBookmarked = bookmarks.includes(art.id);
+            const likes = likesMap[art.id] || art.likes;
+            const isLiked = likesMap[art.id] !== undefined;
+
+            return `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700/80 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="${art.image}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 px-3 py-1 bg-white/90 dark:bg-gray-900/90 backdrop-blur text-xs font-semibold rounded-full text-blue-600 dark:text-blue-400 shadow-sm">
+                            ${art.category}
+                        </span>
+                        <button onclick="toggleBookmark(${art.id}, event)" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-blue-600 transition shadow-sm">
+                            <i class="${isBookmarked ? 'fa-solid text-blue-600' : 'fa-regular'} fa-bookmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 mb-2">
+                                <span>${art.date}</span>
+                                <span>&bull;</span>
+                                <span>${art.readTime}</span>
+                            </div>
+                            <h3 onclick="openModal(${art.id})" class="font-bold text-lg text-gray-900 dark:text-white line-clamp-2 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer mb-2">
+                                ${art.title}
+                            </h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4">
+                                ${art.excerpt}
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img src="${art.authorImg}" class="w-7 h-7 rounded-full object-cover">
+                                <span class="text-xs font-medium text-gray-700 dark:text-gray-300 truncate max-w-[100px]">${art.author}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                                <button onclick="toggleLike(${art.id}, event)" class="flex items-center gap-1 hover:text-red-500 transition">
+                                    <i class="${isLiked ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart"></i>
+                                    <span>${likes}</span>
+                                </button>
+                                <span class="flex items-center gap-1"><i class="fa-regular fa-eye"></i> ${art.views}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Sidebar Rendering
+        function renderSidebar() {
+            // Trending Articles (Top 3 by Views)
+            const sortedTrending = [...articles].sort((a, b) => b.views - a.views).slice(0, 3);
+            const trendingContainer = document.getElementById('trendingList');
+            trendingContainer.innerHTML = sortedTrending.map((art, idx) => `
+                <div class="flex items-start gap-3 group cursor-pointer" onclick="openModal(${art.id})">
+                    <span class="text-2xl font-black text-gray-300 dark:text-gray-600 group-hover:text-blue-500 transition">0${idx + 1}</span>
+                    <div>
+                        <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">${art.category}</span>
+                        <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-blue-600 transition leading-snug">
+                            ${art.title}
+                        </h4>
+                        <span class="text-xs text-gray-400 mt-1 block">${art.views} pembaca</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Tag Cloud
+            const tagContainer = document.getElementById('tagCloud');
+            tagContainer.innerHTML = tags.map(tag => `
+                <button onclick="handleTagClick('${tag}')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-300 rounded-lg text-xs font-medium transition">
+                    #${tag}
+                </button>
+            `).join('');
+        }
+
+        function handleTagClick(tag) {
+            document.getElementById('searchInput').value = tag;
+            handleSearch();
+            showToast(`Mencari topik #${tag}`);
+        }
+
+        // Modal Detail Handling
+        function openModal(id) {
+            const art = articles.find(a => a.id === id);
+            if (!art) return;
+
+            activeModalArticleId = id;
+            art.views += 1; // Increment views
+            
+            document.getElementById('modalCategory').textContent = art.category;
+            document.getElementById('modalTitle').textContent = art.title;
+            document.getElementById('modalAuthorName').textContent = art.author;
+            document.getElementById('modalAuthorImg').src = art.authorImg;
+            document.getElementById('modalDate').textContent = art.date;
+            document.getElementById('modalReadTime').textContent = art.readTime;
+            document.getElementById('modalViews').textContent = art.views;
+            document.getElementById('modalImage').src = art.image;
+            document.getElementById('modalBody').innerHTML = art.content;
+
+            updateModalBookmarkBtn(id);
+            updateModalLikeBtn(id);
+            renderComments(id);
+
+            document.getElementById('articleModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeModal() {
+            document.getElementById('articleModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            renderArticles(); // Update view counts
+        }
+
+        // Bookmark & Like Interactions
+        function toggleBookmark(id, event) {
+            if (event) event.stopPropagation();
+            const index = bookmarks.indexOf(id);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+                showToast('Dihapus dari simpanan');
+            } else {
+                bookmarks.push(id);
+                showToast('Disimpan ke favorit');
+            }
+            localStorage.setItem('dmstore_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkBadge();
+            if (activeModalArticleId === id) updateModalBookmarkBtn(id);
+            renderArticles();
+        }
+
+        function updateBookmarkBadge() {
+            const badge = document.getElementById('bookmarkBadge');
+            if (bookmarks.length > 0) {
+                badge.textContent = bookmarks.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function updateModalBookmarkBtn(id) {
+            const isBookmarked = bookmarks.includes(id);
+            const btn = document.getElementById('modalBookmarkBtn');
+            btn.onclick = (e) => toggleBookmark(id, e);
+            btn.innerHTML = `<i class="${isBookmarked ? 'fa-solid text-blue-600' : 'fa-regular'} fa-bookmark text-xl"></i>`;
+        }
+
+        function toggleLike(id, event) {
+            if (event) event.stopPropagation();
+            const art = articles.find(a => a.id === id);
+            const currentLikes = likesMap[id] || art.likes;
+
+            if (likesMap[id] !== undefined) {
+                delete likesMap[id];
+                showToast('Suka dibatalkan');
+            } else {
+                likesMap[id] = currentLikes + 1;
+                showToast('Menyukai artikel ini');
+            }
+
+            localStorage.setItem('dmstore_likes', JSON.stringify(likesMap));
+            if (activeModalArticleId === id) updateModalLikeBtn(id);
+            renderArticles();
+        }
+
+        function updateModalLikeBtn(id) {
+            const art = articles.find(a => a.id === id);
+            const likes = likesMap[id] || art.likes;
+            const isLiked = likesMap[id] !== undefined;
+
+            const btn = document.getElementById('modalLikeBtn');
+            const countEl = document.getElementById('modalLikeCount');
+
+            btn.onclick = (e) => toggleLike(id, e);
+            countEl.textContent = likes;
+
+            if (isLiked) {
+                btn.className = "flex items-center gap-2 px-5 py-2.5 rounded-full border border-red-200 bg-red-50 text-red-600 dark:bg-red-950/40 dark:border-red-900 transition font-medium";
+                btn.querySelector('i').className = "fa-solid fa-heart text-lg text-red-500";
+            } else {
+                btn.className = "flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-950/30 transition font-medium";
+                btn.querySelector('i').className = "fa-regular fa-heart text-lg";
+            }
+        }
+
+        // Comment System
+        function renderComments(articleId) {
+            const list = document.getElementById('commentsList');
+            const count = document.getElementById('commentCount');
+            const comments = commentsMap[articleId] || [];
+
+            count.textContent = comments.length;
+
+            if (comments.length === 0) {
+                list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 italic">Belum ada komentar. Jadilah yang pertama memberikan tanggapan!</p>`;
+                return;
+            }
+
+            list.innerHTML = comments.map(c => `
+                <div class="bg-gray-50 dark:bg-gray-800/40 p-4 rounded-xl border border-gray-100 dark:border-gray-700/60 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-sm text-gray-900 dark:text-white">${escapeHTML(c.name)}</span>
+                        <span class="text-xs text-gray-400">${c.date}</span>
+                    </div>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${escapeHTML(c.text)}</p>
+                </div>
+            `).join('');
+        }
+
+        function handleAddComment(e) {
+            e.preventDefault();
+            const name = document.getElementById('commenterName').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+
+            if (!name || !text || !activeModalArticleId) return;
+
+            if (!commentsMap[activeModalArticleId]) {
+                commentsMap[activeModalArticleId] = [];
+            }
+
+            commentsMap[activeModalArticleId].unshift({
+                name: name,
+                text: text,
+                date: "Baru saja"
+            });
+
+            localStorage.setItem('dmstore_comments', JSON.stringify(commentsMap));
+            
+            document.getElementById('commentText').value = '';
+            renderComments(activeModalArticleId);
+            showToast('Komentar berhasil ditambahkan!');
+        }
+
+        // Helper Utilities
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletterEmail').value;
+            showToast(`Terima kasih! Email ${email} berhasil didaftarkan.`);
+            document.getElementById('newsletterEmail').value = '';
+        }
+
+        function shareArticle(platform) {
+            showToast(`Membuka bagikan ke ${platform}`);
+        }
+
+        function copyArticleLink() {
+            document.execCommand('copy');
+            showToast('Tautan artikel berhasil disalin!');
+        }
+
+        function resetFilters() {
+            currentCategory = "Semua";
+            searchQuery = "";
+            isBookmarkOnlyView = false;
+            document.getElementById('searchInput').value = "";
+            renderCategoryNav();
+            renderArticles();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const messageEl = document.getElementById('toastMessage');
+            messageEl.textContent = msg;
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-full');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-full');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
